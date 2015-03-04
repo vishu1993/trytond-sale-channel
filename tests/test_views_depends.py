@@ -29,7 +29,6 @@ class TestViewsDepends(unittest.TestCase):
         """
         trytond.tests.test_tryton.install_module('sale_channel')
 
-    @unittest.skip("View is currently not present")
     def test0005views(self):
         '''
         Test views.
