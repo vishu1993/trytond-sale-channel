@@ -217,6 +217,7 @@ class BaseTestCase(unittest.TestCase):
             )
             sale.save()
             sale.on_change_channel()
+            sale.on_change_with_channel()
             self.assertEqual(sale.invoice_method, 'manual')
             return sale
 

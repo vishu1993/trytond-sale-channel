@@ -29,8 +29,9 @@ class Sale:
         }, depends=['id']
     )
 
-    # TODO: Add channel_type function field. It should be there on
-    # on_change and with a getter.
+    channel_type = fields.Function(
+        fields.Char('Channel Type'), 'on_change_with_channel'
+    )
 
     @classmethod
     def __setup__(cls):
@@ -170,6 +171,15 @@ class Sale:
         for key, value in res:
             setattr(self, key, value)
         return res
+
+    @fields.depends('channel')
+    def on_change_with_channel(self, name=None):
+        """
+        Returns the source of the channel
+        """
+        if self.channel:
+            return self.channel.source
+        return None
 
     def check_create_access(self):
         """
