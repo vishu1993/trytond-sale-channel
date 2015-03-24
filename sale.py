@@ -168,7 +168,7 @@ class Sale:
                     self.channel.payment_term.rec_name
 
         # Update AR record
-        for key, value in res:
+        for key, value in res.iteritems():
             setattr(self, key, value)
         return res
 
