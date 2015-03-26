@@ -179,7 +179,6 @@ class Sale:
         """
         if self.channel:
             return self.channel.source
-        return None
 
     def check_create_access(self):
         """
