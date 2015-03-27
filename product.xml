@@ -10,8 +10,13 @@
         <record model="ir.ui.view" id="product_sale_channel_listing_tree">
             <field name="model">product.product.channel_listing</field>
             <field name="type">tree</field>
-            <field name="name">product_sale_channel_listing_tree</field>
+            <field name="name">product_channel_listing_tree</field>
         </record>
 
+        <record model="ir.ui.view" id="product_sale_channel_listing_form">
+            <field name="model">product.product.channel_listing</field>
+            <field name="type">form</field>
+            <field name="name">product_channel_listing_form</field>
+        </record>
     </data>
 </tryton>
