@@ -1,7 +1,7 @@
 Sale Channel
 ============
-.. image:: https://travis-ci.org/openlabs/trytond-sale-channel.png?branch=develop
-  :target: https://travis-ci.org/openlabs/trytond-sale-channel/
+.. image:: https://circleci.com/gh/openlabs/trytond-sale-channel.png?circle-token=develop 
+  :target: https://circleci.com/gh/openlabs/trytond-sale-channel
   :alt: Build Status
 .. image:: https://pypip.in/download/openlabs-sale-channel/badge.svg
     :target: https://pypi.python.org/pypi/openlabs-sale-channel/
