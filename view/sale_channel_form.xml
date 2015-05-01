@@ -44,4 +44,5 @@
             <field name="create_users" colspan="6"/>
         </page>
     </notebook>
+    <group id="action_buttons"></group>
 </form>
