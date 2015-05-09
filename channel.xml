@@ -12,6 +12,18 @@
             <field name="type">form</field>
             <field name="name">sale_channel_form</field>
         </record>
+
+        <!--Channel Exception-->
+        <record model="ir.ui.view" id="channel_exception_form_view">
+            <field name="model">channel.exception</field>
+            <field name="type">form</field>
+            <field name="name">channel_exception_form</field>
+        </record>
+        <record model="ir.ui.view" id="channel_exception_tree_view">
+            <field name="model">channel.exception</field>
+            <field name="type">tree</field>
+            <field name="name">channel_exception_tree</field>
+        </record>
         <record model="ir.action.act_window" id="act_sale_channel_form">
             <field name="name">Channels</field>
             <field name="res_model">sale.channel</field>

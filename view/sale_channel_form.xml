@@ -43,5 +43,8 @@
             <field name="read_users" colspan="6"/>
             <field name="create_users" colspan="6"/>
         </page>
+        <page string="Exceptions" id="exceptions">
+            <field name="exceptions"/>
+        </page>
     </notebook>
 </form>
