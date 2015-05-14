@@ -11,7 +11,7 @@ from trytond.pyson import Eval
 from trytond.model import ModelView, fields, ModelSQL
 
 __metaclass__ = PoolMeta
-__all__ = ['SaleChannel', 'ReadUser', 'WriteUser']
+__all__ = ['SaleChannel', 'ReadUser', 'WriteUser', 'ChannelException']
 
 STATES = {
     'readonly': ~Eval('active', True),
@@ -111,6 +111,10 @@ class SaleChannel(ModelSQL, ModelView):
         ], depends=['company', 'source'], states=PRODUCT_STATES,
     ))
 
+    exceptions = fields.One2Many(
+        'channel.exception', 'channel', 'Exceptions', readonly=True
+    )
+
     @staticmethod
     def default_default_uom():
         Uom = Pool().get('product.uom')
@@ -181,3 +185,28 @@ class WriteUser(ModelSQL):
     user = fields.Many2One(
         'res.user', 'User', ondelete='RESTRICT', required=True
     )
+
+
+class ChannelException(ModelSQL, ModelView):
+    """
+    Channel Exception model
+    """
+    __name__ = 'channel.exception'
+
+    origin = fields.Reference(
+        "Origin", selection='models_get', select=True, readonly=True
+    )
+    log = fields.Text('Exception Log', readonly=True)
+    channel = fields.Many2One(
+        "sale.channel", "Channel", required=True, readonly=True
+    )
+
+    @classmethod
+    def models_get(cls):
+        '''
+        Return valid models allowed for origin
+        '''
+        return [
+            ('sale.sale', 'Sale'),
+            ('sale.line', 'Sale Line'),
+        ]

@@ -475,6 +475,25 @@ class TestSaleChannel(BaseTestCase):
 
             txn.cursor.rollback()
 
+    def test_0090_check_channel_exception(self):
+        """
+        Check if channel exception is being created
+        """
+        ChannelException = POOL.get('channel.exception')
+
+        with Transaction().start(DB_NAME, USER, context=CONTEXT):
+            self.setup_defaults()
+
+            sale = self.create_sale(1, self.channel1)
+
+            channel_exception, = ChannelException.create([{
+                'origin': '%s,%s' % (sale.__name__, sale.id),
+                'log': 'Sale has exception',
+                'channel': sale.channel.id,
+            }])
+
+            self.assert_(channel_exception)
+
 
 def suite():
     """
