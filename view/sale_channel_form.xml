@@ -39,6 +39,18 @@
             <label name="default_uom"/>
             <field name="default_uom"/>
         </page>
+        <page string="Configuration" id="configuration" states="{'invisible': Eval('source') == 'manual' }">
+            <notebook >
+                <page string="General" id="general">
+                </page>
+                <page string="Connection" id="connection">
+                </page>
+                <page string="Taxes" id="taxes">
+                </page>
+                <page string="Advanced" id="advanced">
+                </page>                
+            </notebook>
+        </page>
         <page string="Access" id="access">
             <field name="read_users" colspan="6"/>
             <field name="create_users" colspan="6"/>
