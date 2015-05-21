@@ -126,7 +126,7 @@ class SaleChannel(ModelSQL, ModelView):
         """
         super(SaleChannel, cls).__setup__()
         cls._buttons.update({
-            'import_orders_button': {},
+            'import_data_button': {},
         })
 
     @staticmethod
@@ -171,7 +171,7 @@ class SaleChannel(ModelSQL, ModelView):
         return company and company.party.id or None
 
     @classmethod
-    def import_orders_using_cron(cls, channels):
+    def import_orders_using_cron(cls, channels):  # pragma: nocover
         """
         Cron method to import orders from channels using cron
 
@@ -230,7 +230,7 @@ class SaleChannel(ModelSQL, ModelView):
         raise self.raise_user_error(
             "Method import_products is not implemented for %s channel yet"
             % self.source
-        )
+        )  # pragma: nocover
 
     def import_product(self, identifier):
         """
@@ -248,11 +248,11 @@ class SaleChannel(ModelSQL, ModelView):
         raise self.raise_user_error(
             "Method import_product is not implemented for %s channel yet"
             % self.source
-        )
+        )  # pragma: nocover
 
     @classmethod
-    @ModelView.button_action('sale_channel.wizard_import_orders')
-    def import_orders_button(cls, channels):
+    @ModelView.button_action('sale_channel.wizard_import_data')
+    def import_data_button(cls, channels):
         pass  # pragma: nocover
 
 
