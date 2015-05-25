@@ -44,6 +44,8 @@
                 <page string="Taxes" id="taxes">
                 </page>
                 <page string="Advanced" id="advanced">
+                </page>
+                <page string="Import/Export" id="import_export">
                 </page>                
             </notebook>
         </page>
