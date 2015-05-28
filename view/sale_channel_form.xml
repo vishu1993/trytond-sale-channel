@@ -47,7 +47,7 @@
                 <page string="Import/Export" id="import_export">
 		    <group id="channel_common_buttons" col="3" colspan="4">
 			<button string="Import Data" name="import_data_button"/>
-		    </group>    
+		    </group>
                 </page>                
             </notebook>
         </page>
