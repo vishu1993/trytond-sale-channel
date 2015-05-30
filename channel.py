@@ -15,6 +15,7 @@ from trytond.model import ModelView, fields, ModelSQL
 __metaclass__ = PoolMeta
 __all__ = [
     'SaleChannel', 'ReadUser', 'WriteUser', 'ChannelException',
+    'ChannelOrderState'
 ]
 
 STATES = {
@@ -103,6 +104,10 @@ class SaleChannel(ModelSQL, ModelView):
 
     exceptions = fields.One2Many(
         'channel.exception', 'channel', 'Exceptions'
+    )
+
+    order_states = fields.One2Many(
+        "sale.channel.order_state", "channel", "Order States"
     )
 
     @classmethod
@@ -300,3 +305,64 @@ class ChannelException(ModelSQL, ModelView):
             ('sale.sale', 'Sale'),
             ('sale.line', 'Sale Line'),
         ]
+
+
+class ChannelOrderState(ModelSQL, ModelView):
+    """
+    Sale Channel - Tryton Order State map
+
+    This model stores a map of order states between tryton and sale channel.
+    This allows the user to configure the states mapping according to his/her
+    convenience. This map is used to process orders in tryton when they are
+    imported. This is also used to map the order status back to channel when
+    sales are exported. This also allows the user to determine in which state
+    order need to be imported.
+    """
+    __name__ = 'sale.channel.order_state'
+
+    name = fields.Char('Name', required=True, readonly=True)
+    code = fields.Char('Code', required=True, readonly=True)
+    action = fields.Selection([
+        ('do_not_import', 'Do Not Import'),
+        ('process_automatically', 'Process Automatically'),
+        ('process_manually', 'Process Manually'),
+        ('import_as_past', 'Import As Past Orders'),
+    ], 'Action', required=True)
+    invoice_method = fields.Selection([
+        ('manual', 'Manual'),
+        ('order', 'On Order Processed'),
+        ('shipment', 'On Shipment Sent'),
+    ], 'Invoice Method', required=True)
+    shipment_method = fields.Selection([
+        ('manual', 'Manual'),
+        ('order', 'On Order Processed'),
+        ('invoice', 'On Invoice Paid'),
+    ], 'Shipment Method', required=True)
+    channel = fields.Many2One(
+        'sale.channel', 'Sale Channel', required=True,
+        ondelete="CASCADE", readonly=True
+    )
+
+    @staticmethod
+    def default_channel():
+        "Return default channel from context"
+        return Transaction().context.get('current_channel')
+
+    @classmethod
+    def get_tryton_state(cls, name):
+        """
+        Get the tryton state corresponding to the channel state
+        as per the predefined logic.
+
+        Downstream modules need to inherit method and map states as per
+        convenience.
+
+        :param name: Name of channel state
+        :returns: A dictionary of tryton state and shipment and invoice methods
+        """
+
+        return {
+            'tryton_state': 'do_not_import',
+            'invoice_method': 'manual',
+            'shipment_method': 'manual'
+        }

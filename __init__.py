@@ -7,7 +7,7 @@
 """
 from trytond.pool import Pool
 from channel import (
-    SaleChannel, ReadUser, WriteUser, ChannelException
+    SaleChannel, ReadUser, WriteUser, ChannelException, ChannelOrderState
 )
 from wizard import (
     ImportDataWizard, ImportDataWizardStart, ImportDataWizardSuccess,
@@ -24,6 +24,7 @@ def register():
         ReadUser,
         WriteUser,
         ChannelException,
+        ChannelOrderState,
         User,
         Sale,
         ProductSaleChannelListing,

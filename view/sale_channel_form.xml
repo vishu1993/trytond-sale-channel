@@ -58,5 +58,8 @@
         <page string="Exceptions" id="exceptions">
             <field name="exceptions"/>
         </page>
+        <page string="Order States" id="order_states">
+            <field name="order_states"/>
+        </page>
     </notebook>
 </form>
