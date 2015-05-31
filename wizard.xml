@@ -28,5 +28,18 @@
             <field name="type">form</field>
             <field name="name">wizard_import_data_properties_form</field>
         </record>
+
+        <!--Import Order states wizard-->
+        <record model="ir.action.wizard" id="wizard_import_order_states">
+            <field name="name">Import Order States</field>
+            <field name="wiz_name">sale.channel.import_order_states</field>
+            <field name="model">sale.channel</field>
+        </record>
+
+        <record model="ir.ui.view" id="wizard_import_order_states_start_view_form">
+            <field name="model">sale.channel.import_order_states.start</field>
+            <field name="type">form</field>
+            <field name="name">wizard_import_order_states_start_form</field>
+          </record>
     </data>
 </tryton>

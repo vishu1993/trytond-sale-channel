@@ -118,6 +118,7 @@ class SaleChannel(ModelSQL, ModelView):
         super(SaleChannel, cls).__setup__()
         cls._buttons.update({
             'import_data_button': {},
+            'import_order_states_button': {},
         })
 
     @staticmethod
@@ -246,6 +247,74 @@ class SaleChannel(ModelSQL, ModelView):
     def import_data_button(cls, channels):
         pass  # pragma: nocover
 
+    @classmethod
+    @ModelView.button_action('sale_channel.wizard_import_order_states')
+    def import_order_states_button(cls, channels):
+        """
+        Import order states for current channel
+
+        :param channels: List of active records of channels
+        """
+        pass
+
+    def import_order_states(self):
+        """
+        Imports order states for current channel
+
+        Since external channels are implemented by downstream modules, it is
+        the responsibility of those channels to implement importing or call
+        super to delegate.
+        """
+        raise self.raise_user_error(
+            "This feature has not been implemented for %s channel yet"
+            % self.source
+        )
+
+    def get_tryton_action(self, name):
+        """
+        Get the tryton action corresponding to the channel state
+        as per the predefined logic.
+
+        Downstream modules need to inherit method and map states as per
+        convenience.
+
+        :param name: Name of channel state
+        :returns: A dictionary of tryton action and shipment and invoice methods
+        """
+        return {
+            'action': 'do_not_import',
+            'invoice_method': 'manual',
+            'shipment_method': 'manual'
+        }
+
+    def create_order_state(self, code, name):
+        """
+        This method creates order state for channel with given state code and
+        state name. If state already exist, return same.
+
+        :param code: State code used by external channel
+        :param name: State name used by external channel
+        :return: Active record of order state created or found
+        """
+        OrderState = Pool().get('sale.channel.order_state')
+
+        order_states = OrderState.search([
+            ('code', '=', code),
+            ('channel', '=', self.id)
+        ])
+
+        if order_states:
+            return order_states[0]
+
+        values = self.get_tryton_action(code)
+        values.update({
+            'name': name,
+            'code': code,
+            'channel': self.id,
+        })
+
+        return OrderState.create([values])[0]
+
 
 class ReadUser(ModelSQL):
     """
@@ -347,22 +416,3 @@ class ChannelOrderState(ModelSQL, ModelView):
     def default_channel():
         "Return default channel from context"
         return Transaction().context.get('current_channel')
-
-    @classmethod
-    def get_tryton_state(cls, name):
-        """
-        Get the tryton state corresponding to the channel state
-        as per the predefined logic.
-
-        Downstream modules need to inherit method and map states as per
-        convenience.
-
-        :param name: Name of channel state
-        :returns: A dictionary of tryton state and shipment and invoice methods
-        """
-
-        return {
-            'tryton_state': 'do_not_import',
-            'invoice_method': 'manual',
-            'shipment_method': 'manual'
-        }

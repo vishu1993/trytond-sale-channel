@@ -11,7 +11,7 @@ from channel import (
 )
 from wizard import (
     ImportDataWizard, ImportDataWizardStart, ImportDataWizardSuccess,
-    ImportDataWizardProperties
+    ImportDataWizardProperties, ImportOrderStatesStart, ImportOrderStates
 )
 from product import ProductSaleChannelListing, Product
 from sale import Sale
@@ -32,9 +32,11 @@ def register():
         ImportDataWizardStart,
         ImportDataWizardSuccess,
         ImportDataWizardProperties,
+        ImportOrderStatesStart,
         module='sale_channel', type_='model'
     )
     Pool.register(
         ImportDataWizard,
+        ImportOrderStates,
         module='sale_channel', type_='wizard'
     )
