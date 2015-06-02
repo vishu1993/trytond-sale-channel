@@ -15,7 +15,8 @@ from trytond.pyson import Eval
 
 __all__ = [
     'ImportDataWizard', 'ImportDataWizardStart', 'ImportDataWizardSuccess',
-    'ImportDataWizardProperties', 'ImportOrderStatesStart', 'ImportOrderStates'
+    'ImportDataWizardProperties', 'ImportOrderStatesStart', 'ImportOrderStates',
+    'ExportPricesStatus', 'ExportPricesStart', 'ExportPrices'
 ]
 
 
@@ -254,3 +255,67 @@ class ImportOrderStates(Wizard):
         channel.import_order_states()
 
         return {}
+
+
+class ExportPricesStart(ModelView):
+    "Export Prices Start View"
+    __name__ = 'sale.channel.export_prices.start'
+
+    message = fields.Text("Messgae", readonly=True)
+
+
+class ExportPricesStatus(ModelView):
+    "Export Prices Status View"
+    __name__ = 'sale.channel.export_prices.status'
+
+    products_count = fields.Integer('Products Count', readonly=True)
+
+
+class ExportPrices(Wizard):
+    """
+    Export Tier Prices Wizard
+    """
+    __name__ = 'sale.channel.export_prices'
+
+    start = StateView(
+        'sale.channel.export_prices.start',
+        'sale_channel.export_prices_start_view_form',
+        [
+            Button('Cancel', 'end', 'tryton-cancel'),
+            Button('Continue', 'export_', 'tryton-ok', default=True),
+        ]
+    )
+
+    export_ = StateView(
+        'sale.channel.export_prices.status',
+        'sale_channel.export_prices_status_view_form',
+        [
+            Button('OK', 'end', 'tryton-ok'),
+        ]
+    )
+
+    def default_start(self, fields):
+        """
+        Return message to display
+        """
+        Channel = Pool().get('sale.channel')
+
+        channel = Channel(Transaction().context.get('active_id'))
+
+        return {
+            'message':
+                "This wizard will export product prices to %s "
+                "channel (%s). " % (channel.name, channel.source)
+        }
+
+    def default_export_(self, fields):
+        """
+        Export prices and return count of products
+        """
+        Channel = Pool().get('sale.channel')
+
+        channel = Channel(Transaction().context.get('active_id'))
+
+        return {
+            'products_count': channel.export_product_prices()
+        }

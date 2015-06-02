@@ -162,6 +162,21 @@ class SaleChannel(ModelSQL, ModelView):
             company = Company(SaleChannel.default_company())  # pragma: nocover
         return company and company.party.id or None
 
+    def export_product_prices(self):
+        """
+        Export product prices to channel
+
+        Since external channels are implemented by downstream modules, it is
+        the responsibility of those channels to reuse this method or call super.
+
+        :return: List of active records of products for which prices are
+        exported
+        """
+        raise self.raise_user_error(
+            "This feature has not been implemented for %s channel yet."
+            % self.source
+        )
+
     @classmethod
     def import_orders_using_cron(cls, channels):  # pragma: nocover
         """
