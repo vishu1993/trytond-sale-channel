@@ -15,7 +15,7 @@ from trytond.pyson import Eval
 
 __all__ = [
     'ImportDataWizard', 'ImportDataWizardStart', 'ImportDataWizardSuccess',
-    'ImportDataWizardProperties'
+    'ImportDataWizardProperties', 'ImportOrderStatesStart', 'ImportOrderStates'
 ]
 
 
@@ -225,3 +225,32 @@ class ImportDataWizard(Wizard):
             'no_of_orders': self.success.no_of_orders,
             'no_of_products': self.success.no_of_products,
         }
+
+
+class ImportOrderStatesStart(ModelView):
+    "Import Order States Start"
+    __name__ = 'sale.channel.import_order_states.start'
+
+
+class ImportOrderStates(Wizard):
+    """
+    Wizard to import order states for channel
+    """
+    __name__ = 'sale.channel.import_order_states'
+
+    start = StateView(
+        'sale.channel.import_order_states.start',
+        'sale_channel.wizard_import_order_states_start_view_form',
+        [
+            Button('Ok', 'end', 'tryton-ok'),
+        ]
+    )
+
+    def default_start(self, fields):
+        Channel = Pool().get('sale.channel')
+
+        channel = Channel(Transaction().context.get('active_id'))
+
+        channel.import_order_states()
+
+        return {}
