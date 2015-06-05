@@ -193,6 +193,22 @@ class SaleChannel(ModelSQL, ModelView):
                 # Silently pass if method is not implemented
                 pass
 
+    @classmethod
+    def export_product_prices_using_cron(cls, channels):  # pragma: nocover
+        """
+        Cron method to export product prices to external channel using cron
+
+        Downstream module need not to implement this method.
+        It will automatically call export_product_prices method of the channel.
+        Silently pass if export_product_prices is not implemented
+        """
+        for channel in channels:
+            try:
+                channel.export_product_prices()
+            except UserError:
+                # Silently pass if method is not implemented
+                pass
+
     def import_orders(self):
         """
         Import orders from external channel.
