@@ -28,6 +28,10 @@ PRODUCT_STATES = {
     'required': Eval('source') != 'manual',
 }
 
+INVISIBLE_IF_MANUAL = {
+    'invisible': Eval('source') == 'manual',
+}
+
 
 class SaleChannel(ModelSQL, ModelView):
     """
@@ -108,6 +112,28 @@ class SaleChannel(ModelSQL, ModelView):
 
     order_states = fields.One2Many(
         "sale.channel.order_state", "channel", "Order States"
+    )
+
+    last_order_import_time = fields.DateTime(
+        'Last Order Import Time', states=INVISIBLE_IF_MANUAL,
+        depends=['source']
+    )
+    last_order_export_time = fields.DateTime(
+        "Last Order Export Time", states=INVISIBLE_IF_MANUAL,
+        depends=['source']
+    )
+
+    last_shipment_export_time = fields.DateTime(
+        'Last shipment export time', states=INVISIBLE_IF_MANUAL,
+        depends=['source']
+    )
+    last_product_price_export_time = fields.DateTime(
+        'Last Product Price Export Time', states=INVISIBLE_IF_MANUAL,
+        depends=['source']
+    )
+    last_product_export_time = fields.DateTime(
+        'Last Product Export Time', states=INVISIBLE_IF_MANUAL,
+        depends=['source']
     )
 
     @classmethod
